@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'tasks',
 ]
 
+#Castom User Model
+AUTH_USER_MODEL = 'accounts.Worker'
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

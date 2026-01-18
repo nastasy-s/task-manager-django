@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class Position(models.Model):
     name = models.CharField(
@@ -13,3 +14,21 @@ class Position(models.Model):
     class Meta:
         verbose_name = "Position"
         verbose_name_plural = "Positions"
+
+
+class Worker(AbstractUser):
+    position = models.ForeignKey(
+        Position,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="workers",
+        verbose_name="Position"
+    )
+
+    def __srt__(self):
+        return self.username
+
+    class Meta:
+        verbose_name = "Worker"
+        verbose_name_plural = "Workers"
