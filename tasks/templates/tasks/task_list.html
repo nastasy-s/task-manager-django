@@ -9,7 +9,9 @@
         <ul>
             {% for task in tasks %}
                 <li>
-                    <strong>{{ task.name }}</strong> -
+                    <a href="{% url 'tasks:task-detail' pk=task.pk %}" style="text-decoration: none; color: #0066cc;">
+                        <strong>{{ task.name }}</strong>
+                    </a> -
                     Priority: {{ task.get_priority_display }} |
                     Type: {{ task.task_type }} |
                     Deadline: {{ task.deadline }} |

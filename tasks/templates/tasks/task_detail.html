@@ -1,0 +1,67 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}{{ task.name }} - TaskFlow{% endblock %}
+
+{% block content %}
+    <h1>{{ task.name }}</h1>
+
+    <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+
+        <p><strong>Description:</strong></p>
+        <p>{{ task.description|default:"No description provided." }}</p>
+
+        <hr>
+
+        <p><strong>Type:</strong> {{ task.task_type }}</p>
+
+        <p><strong>Priority:</strong>
+            <span style="
+                {% if task.priority == 'urgent' %}color: red; font-weight: bold;
+                {% elif task.priority == 'high' %}color: orange; font-weight: bold;
+                {% elif task.priority == 'medium' %}color: blue;
+                {% else %}color: gray;
+                {% endif %}
+            ">
+                {{ task.get_priority_display }}
+            </span>
+        </p>
+
+        <p><strong>Deadline:</strong> {{ task.deadline|date:"F j, Y" }}</p>
+
+        <p><strong>Status:</strong>
+            {% if task.is_completed %}
+                <span style="color: green;">Completed</span>
+            {% else %}
+                <span style="color: orange;">In Progress</span>
+            {% endif %}
+        </p>
+
+        <hr>
+
+        <p><strong>Assigned to:</strong></p>
+        {% if task.assignees.all %}
+            <ul>
+                {% for worker in task.assignees.all %}
+                    <li>{{ worker.username }} ({{ worker.position|default:"No position" }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: gray;">Not assigned yet</p>
+        {% endif %}
+
+        <hr>
+
+        <p><strong>Created:</strong> {{ task.created_at|date:"F j, Y, g:i a" }}</p>
+        <p><strong>Last Updated:</strong> {{ task.updated_at|date:"F j, Y, g:i a" }}</p>
+    </div>
+
+    <a href="{% url 'tasks:task-list' %}" style="
+        background: #333;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 3px;
+        display: inline-block;
+    ">← Back to All Tasks</a>
+
+{% endblock %}
