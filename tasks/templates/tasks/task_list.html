@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - All Tasks</title>
+</head>
+<body>
+    <h1>All Tasks</h1>
+
+    {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <strong>{{ task.name }}</strong> -
+                    Priority: {{ task.get_priority_display }} |
+                    Type: {{ task.task_type }} |
+                    Deadline: {{ task.deadline }} |
+                    {% if task.is_completed %}
+                        ✅ Completed
+                    {% else %}
+                        ⏳ In Progress
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks yet. Create your first task!</p>
+    {% endif %}
+</body>
+</html>
