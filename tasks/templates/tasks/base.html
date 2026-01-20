@@ -7,42 +7,198 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* CSS Variables for themes */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #212529;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f8f9fa;
+        }
+
+        /* Body background and text */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Muted text in dark theme */
+        [data-theme="dark"] .text-muted {
+            color: #adb5bd !important;
+        }
+
+        /* DARK THEME COMPONENTS */
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            border-color: #333;
+        }
+
+        /* Card headers */
+        [data-theme="dark"] .card-header {
+            background-color: #252525;
+            color: #ffffff;
+            border-bottom: 1px solid #333;
+        }
+
+        /* Forms placeholders */
+        [data-theme="dark"] .form-control::placeholder {
+            color: #aaaaaa;
+        }
+
+        /* Labels */
+        [data-theme="dark"] label {
+            color: #cccccc;
+        }
+
+        /* Buttons secondary */
+        [data-theme="dark"] .btn-secondary {
+            background-color: #444;
+            border-color: #555;
+        }
+
+        /* Filter box shadow softer */
+        [data-theme="dark"] .card {
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        /* TABLE DARK THEME - Super Priority */
+        [data-theme="dark"] .table {
+            --bs-table-bg: #1e1e1e;
+            --bs-table-color: #f1f1f1;
+            --bs-table-border-color: #333;
+            --bs-table-striped-bg: #252525;
+            --bs-table-striped-color: #f1f1f1;
+            --bs-table-hover-bg: #2a2a2a;
+            --bs-table-hover-color: #f1f1f1;
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            border-color: #333;
+        }
+
+        [data-theme="dark"] .table thead th {
+            background-color: #252525 !important;
+            color: #ffffff !important;
+            border-color: #333 !important;
+        }
+
+        [data-theme="dark"] .table tbody tr {
+            background-color: #1e1e1e !important;
+            color: #f1f1f1 !important;
+        }
+
+        [data-theme="dark"] .table tbody tr td {
+            background-color: #1e1e1e !important;
+            color: #f1f1f1 !important;
+            border-color: #333 !important;
+        }
+
+        [data-theme="dark"] .table tbody tr:hover,
+        [data-theme="dark"] .table tbody tr:hover td {
+            background-color: #2a2a2a !important;
+        }
+
+        [data-theme="dark"] .table td,
+        [data-theme="dark"] .table th {
+            border-color: #333 !important;
+        }
+
+        /* Links in dark mode */
+        [data-theme="dark"] a {
+            color: #5ea3d0;
+        }
+
+        [data-theme="dark"] a:hover {
+            color: #7bb8df;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'tasks:home' %}">TaskFlow</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'tasks:home' %}">TaskFlow</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tasks:home' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'tasks:task-list' %}">All Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Create Task</a>
+                </li>
+            </ul>
+
+            <!-- Theme toggle button -->
+            <button id="theme-toggle" class="btn btn-outline-light ms-auto" type="button">
+                Dark mode
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tasks:home' %}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tasks:task-list' %}">All Tasks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">➕ Create Task</a>
-                    </li>
-                </ul>
-            </div>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container mt-4">
-        {% block content %}
-        <!-- Контент з інших templates -->
-        {% endblock %}
     </div>
+</nav>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Main Content -->
+<div class="container mt-4">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Theme switch logic -->
+<script>
+    const toggleButton = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+
+    function setLightTheme() {
+        root.removeAttribute('data-theme');
+        toggleButton.textContent = 'Dark mode';
+        localStorage.setItem('theme', 'light');
+    }
+
+    function setDarkTheme() {
+        root.setAttribute('data-theme', 'dark');
+        toggleButton.textContent = 'Light mode';
+        localStorage.setItem('theme', 'dark');
+    }
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        setDarkTheme();
+    } else {
+        setLightTheme();
+    }
+
+    // Toggle theme on button click
+    toggleButton.addEventListener('click', () => {
+        const isDark = root.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            setLightTheme();
+        } else {
+            setDarkTheme();
+        }
+    });
+</script>
+
 </body>
 </html>
