@@ -1,0 +1,119 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}{{ title }} - TaskFlow{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="mb-0">{{ title }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Name field -->
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">
+                                Task Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description field -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">
+                                Description
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.description.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Task Type and Priority in one row -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.task_type.id_for_label }}" class="form-label">
+                                    Task Type <span class="text-danger">*</span>
+                                </label>
+                                {{ form.task_type }}
+                                {% if form.task_type.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.task_type.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.priority.id_for_label }}" class="form-label">
+                                    Priority <span class="text-danger">*</span>
+                                </label>
+                                {{ form.priority }}
+                                {% if form.priority.errors %}
+                                    <div class="text-danger mt-1">
+                                        {{ form.priority.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Deadline field -->
+                        <div class="mb-3">
+                            <label for="{{ form.deadline.id_for_label }}" class="form-label">
+                                Deadline <span class="text-danger">*</span>
+                            </label>
+                            {{ form.deadline }}
+                            {% if form.deadline.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.deadline.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Assignees field -->
+                        <div class="mb-3">
+                            <label for="{{ form.assignees.id_for_label }}" class="form-label">
+                                Assignees
+                            </label>
+                            <small class="text-muted">(Hold Cmd/Ctrl to select multiple)</small>
+                            {{ form.assignees }}
+                            {% if form.assignees.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.assignees.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Is Completed checkbox -->
+                        <div class="mb-3 form-check">
+                            {{ form.is_completed }}
+                            <label class="form-check-label" for="{{ form.is_completed.id_for_label }}">
+                                Mark as completed
+                            </label>
+                            {% if form.is_completed.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.is_completed.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+                            <a href="{% url 'tasks:home' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

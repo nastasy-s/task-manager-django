@@ -1,6 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Task, TaskType
 from accounts.models import Position
+from .forms import TaskForm
 
 # Create your views here.
 def task_list(request):
@@ -69,3 +73,17 @@ def task_detail(request, pk):
         'task': task,
     }
     return render(request, 'tasks/task_detail.html', context)
+
+
+class TaskCreateView(generic.CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'tasks/task_form.html'
+    success_url = reverse_lazy('tasks:home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create Task'
+        context['button_text'] = 'Create'
+        return context
+
