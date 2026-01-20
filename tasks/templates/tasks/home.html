@@ -1,0 +1,162 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Dashboard - TaskFlow{% endblock %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4">TaskFlow Dashboard</h1>
+            <p class="lead text-muted">Welcome back! Here's your task overview.</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total Tasks</h5>
+                    <p class="card-text display-6">{{ total_tasks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Completed</h5>
+                    <p class="card-text display-6">{{ completed_tasks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">In Progress</h5>
+                    <p class="card-text display-6">{{ in_progress_tasks }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Filter Tasks</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="position" class="form-label">Position</label>
+                    <select name="position" id="position" class="form-select">
+                        <option value="">All Positions</option>
+                        {% for pos in positions %}
+                            <option value="{{ pos.id }}"
+                                {% if current_position == pos.id|stringformat:"s" %}selected{% endif %}>
+                                {{ pos.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="task_type" class="form-label">Task Type</label>
+                    <select name="task_type" id="task_type" class="form-select">
+                        <option value="">All Types</option>
+                        {% for type in task_types %}
+                            <option value="{{ type.id }}"
+                                {% if current_task_type == type.id|stringformat:"s" %}selected{% endif %}>
+                                {{ type.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="priority" class="form-label">Priority</label>
+                    <select name="priority" id="priority" class="form-select">
+                        <option value="">All Priorities</option>
+                        {% for value, label in priorities %}
+                            <option value="{{ value }}"
+                                {% if current_priority == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'tasks:home' %}" class="btn btn-secondary">Clear Filters</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tasks Grid -->
+    <h3 class="mb-3">Tasks ({{ tasks.count }})</h3>
+
+    {% if tasks %}
+        <div class="row">
+            {% for task in tasks %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header
+                            {% if task.priority == 'urgent' %}bg-danger text-white
+                            {% elif task.priority == 'high' %}bg-warning
+                            {% elif task.priority == 'medium' %}bg-info text-white
+                            {% else %}bg-secondary text-white
+                            {% endif %}">
+                            <h5 class="card-title mb-0">
+                                <a href="{% url 'tasks:task-detail' pk=task.pk %}"
+                                   class="text-decoration-none
+                                   {% if task.priority == 'urgent' or task.priority == 'medium' or task.priority == 'low' %}text-white
+                                   {% else %}text-dark
+                                   {% endif %}">
+                                    {{ task.name }}
+                                </a>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Type:</strong>
+                                <span class="badge bg-secondary">{{ task.task_type }}</span>
+                            </p>
+                            <p class="card-text">
+                                <strong>Priority:</strong> {{ task.get_priority_display }}
+                            </p>
+                            <p class="card-text">
+                                <strong>Deadline:</strong> {{ task.deadline|date:"M d, Y" }}
+                            </p>
+                            <p class="card-text">
+                                <strong>Status:</strong>
+                                {% if task.is_completed %}
+                                    <span class="badge bg-success">Completed</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">In Progress</span>
+                                {% endif %}
+                            </p>
+
+                            {% if task.assignees.all %}
+                                <p class="card-text">
+                                    <strong>Assigned to:</strong><br>
+                                    {% for worker in task.assignees.all %}
+                                        <span class="badge bg-light text-dark">{{ worker.username }}</span>
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'tasks:task-detail' pk=task.pk %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <h4 class="alert-heading">No tasks found!</h4>
+            <p>Try adjusting your filters or create a new task.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}
