@@ -1,119 +1,196 @@
-{% extends 'tasks/base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ title }} - TaskFlow{% endblock %}
 
 {% block content %}
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h3 class="mb-0">{{ title }}</h3>
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient text-white py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h2 class="mb-0 d-flex align-items-center">
+                        <i class="bi bi-{% if title == 'Create Task' %}plus-circle{% else %}pencil-square{% endif %} me-3"></i>
+                        {{ title }}
+                    </h2>
                 </div>
-                <div class="card-body">
-                    <form method="post">
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" novalidate>
                         {% csrf_token %}
 
-                        <!-- Name field -->
-                        <div class="mb-3">
-                            <label for="{{ form.name.id_for_label }}" class="form-label">
-                                Task Name <span class="text-danger">*</span>
+                        <div class="mb-4">
+                            <label for="{{ form.name.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-card-text text-primary me-2"></i>Task Name
+                                <span class="text-danger">*</span>
                             </label>
-                            {{ form.name }}
+                            <input type="text"
+                                   name="{{ form.name.name }}"
+                                   class="form-control form-control-lg {% if form.name.errors %}is-invalid{% endif %}"
+                                   id="{{ form.name.id_for_label }}"
+                                   value="{{ form.name.value|default:'' }}"
+                                   placeholder="Enter task name"
+                                   required>
                             {% if form.name.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ form.name.errors }}
-                                </div>
+                                <div class="invalid-feedback">{{ form.name.errors.0 }}</div>
                             {% endif %}
                         </div>
 
-                        <!-- Description field -->
-                        <div class="mb-3">
-                            <label for="{{ form.description.id_for_label }}" class="form-label">
-                                Description
+                        <div class="mb-4">
+                            <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-align-left text-info me-2"></i>Description
                             </label>
-                            {{ form.description }}
+                            <textarea name="{{ form.description.name }}"
+                                      class="form-control {% if form.description.errors %}is-invalid{% endif %}"
+                                      id="{{ form.description.id_for_label }}"
+                                      rows="4"
+                                      placeholder="Enter task description">{{ form.description.value|default:'' }}</textarea>
                             {% if form.description.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ form.description.errors }}
-                                </div>
+                                <div class="invalid-feedback">{{ form.description.errors.0 }}</div>
                             {% endif %}
                         </div>
 
-                        <!-- Task Type and Priority in one row -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.task_type.id_for_label }}" class="form-label">
-                                    Task Type <span class="text-danger">*</span>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label for="{{ form.task_type.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="bi bi-tag text-success me-2"></i>Task Type
+                                    <span class="text-danger">*</span>
                                 </label>
                                 {{ form.task_type }}
                                 {% if form.task_type.errors %}
-                                    <div class="text-danger mt-1">
-                                        {{ form.task_type.errors }}
-                                    </div>
+                                    <div class="invalid-feedback d-block">{{ form.task_type.errors.0 }}</div>
                                 {% endif %}
                             </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.priority.id_for_label }}" class="form-label">
-                                    Priority <span class="text-danger">*</span>
+                            <div class="col-md-6">
+                                <label for="{{ form.priority.id_for_label }}" class="form-label fw-semibold">
+                                    <i class="bi bi-flag text-warning me-2"></i>Priority
+                                    <span class="text-danger">*</span>
                                 </label>
                                 {{ form.priority }}
                                 {% if form.priority.errors %}
-                                    <div class="text-danger mt-1">
-                                        {{ form.priority.errors }}
-                                    </div>
+                                    <div class="invalid-feedback d-block">{{ form.priority.errors.0 }}</div>
                                 {% endif %}
                             </div>
                         </div>
 
-                        <!-- Deadline field -->
-                        <div class="mb-3">
-                            <label for="{{ form.deadline.id_for_label }}" class="form-label">
-                                Deadline <span class="text-danger">*</span>
+                        <div class="mb-4">
+                            <label for="{{ form.deadline.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-calendar-event text-danger me-2"></i>Deadline
+                                <span class="text-danger">*</span>
                             </label>
-                            {{ form.deadline }}
+                            <input type="date"
+                                   name="{{ form.deadline.name }}"
+                                   class="form-control form-control-lg {% if form.deadline.errors %}is-invalid{% endif %}"
+                                   id="{{ form.deadline.id_for_label }}"
+                                   value="{{ form.deadline.value|date:'Y-m-d'|default:'' }}"
+                                   required>
                             {% if form.deadline.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ form.deadline.errors }}
-                                </div>
+                                <div class="invalid-feedback">{{ form.deadline.errors.0 }}</div>
                             {% endif %}
                         </div>
 
-                        <!-- Assignees field -->
-                        <div class="mb-3">
-                            <label for="{{ form.assignees.id_for_label }}" class="form-label">
-                                Assignees
+                        <div class="mb-4">
+                            <label for="{{ form.assignees.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-people text-primary me-2"></i>Assignees
+                                <small class="text-muted">(Hold Cmd/Ctrl to select multiple)</small>
                             </label>
-                            <small class="text-muted">(Hold Cmd/Ctrl to select multiple)</small>
                             {{ form.assignees }}
                             {% if form.assignees.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ form.assignees.errors }}
-                                </div>
+                                <div class="invalid-feedback d-block">{{ form.assignees.errors.0 }}</div>
                             {% endif %}
                         </div>
 
-                        <!-- Is Completed checkbox -->
-                        <div class="mb-3 form-check">
-                            {{ form.is_completed }}
-                            <label class="form-check-label" for="{{ form.is_completed.id_for_label }}">
-                                Mark as completed
-                            </label>
-                            {% if form.is_completed.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ form.is_completed.errors }}
-                                </div>
-                            {% endif %}
+                        {% if title == 'Edit Task' %}
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="{{ form.is_completed.name }}"
+                                       id="{{ form.is_completed.id_for_label }}"
+                                       {% if form.is_completed.value %}checked{% endif %}>
+                                <label class="form-check-label fw-semibold" for="{{ form.is_completed.id_for_label }}">
+                                    <i class="bi bi-check-circle text-success me-2"></i>Mark as completed
+                                </label>
+                            </div>
                         </div>
+                        {% endif %}
 
-                        <!-- Buttons -->
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">{{ button_text }}</button>
-                            <a href="{% url 'tasks:home' %}" class="btn btn-secondary">Cancel</a>
+                        <hr class="my-4">
+
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a href="{% url 'tasks:home' %}" class="btn btn-secondary btn-lg px-4">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="bi bi-{% if title == 'Create Task' %}plus-circle{% else %}check-circle{% endif %} me-2"></i>
+                                {{ button_text }}
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        border: none;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+    }
+
+    .form-label {
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+    }
+
+    .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+
+    .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1) !important;
+    }
+</style>
 {% endblock %}

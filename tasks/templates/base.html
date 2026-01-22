@@ -8,6 +8,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         /* CSS Variables for themes */
         :root {
@@ -117,6 +120,36 @@
 
         [data-theme="dark"] a:hover {
             color: #7bb8df;
+        }
+
+        /* FORMS IN DARK THEME */
+        [data-theme="dark"] .form-label {
+            color: #e0e0e0 !important;
+        }
+
+        [data-theme="dark"] .form-control:focus,
+        [data-theme="dark"] .form-select:focus {
+            background-color: #2a2a2a;
+            color: #f1f1f1;
+            border-color: #667eea;
+        }
+
+        [data-theme="dark"] .invalid-feedback {
+            color: #ff6b6b;
+        }
+
+        [data-theme="dark"] .form-check-input {
+            background-color: #2a2a2a;
+            border-color: #555;
+        }
+
+        [data-theme="dark"] .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+
+        [data-theme="dark"] .form-check-label {
+            color: #e0e0e0;
         }
     </style>
 </head>
