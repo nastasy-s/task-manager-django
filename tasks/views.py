@@ -6,18 +6,6 @@ from .models import Task, TaskType
 from accounts.models import Position
 from .forms import TaskForm
 
-# Create your views here.
-def task_list(request):
-    tasks = Task.objects.all()
-    context = {
-        'tasks': tasks,
-    }
-    return render(request, 'tasks/task_list.html', context)
-
-def task_detail(request, pk):
-    task = get_object_or_404(Task, pk=pk)
-    context = {'task': task}
-    return render(request, 'tasks/task_detail.html', context)
 
 def home(request):
     tasks = Task.objects.all()
@@ -26,7 +14,7 @@ def home(request):
     priority_filter = request.GET.get('priority')
 
     if position_filter:
-        tasks = tasks.filter(assignees__position__=position_filter)
+        tasks = tasks.filter(assignees__position=position_filter)
 
     if task_type_filter:
         tasks = tasks.filter(task_type__id=task_type_filter)
@@ -87,3 +75,21 @@ class TaskCreateView(generic.CreateView):
         context['button_text'] = 'Create'
         return context
 
+
+class TaskUpdateView(generic.UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'tasks/task_form.html'
+    success_url = reverse_lazy('tasks:home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edit Task'
+        context['button_text'] = 'Save'
+        return context
+
+
+class TaskDeleteView(generic.DeleteView):
+    model = Task
+    template_name = 'tasks/task_confirm_delete.html'
+    success_url = reverse_lazy('tasks:home')
