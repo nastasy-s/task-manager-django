@@ -1,158 +1,131 @@
-# task-manager-django
-A Django-based task management application with dark mode support, advanced filtering, and Bootstrap templates.
+## Project Overview
+TaskFlow is a Django-based task management system that enables teams to create, track, and manage tasks efficiently. The application features a modern UI with dark/light theme support, comprehensive filtering, and intuitive task management.
 
-###Core Functionality###
+##Implemented Features
 
+### Core Functionality
 Full CRUD Operations - Create, Read, Update, Delete tasks
-Task Assignment - Assign tasks to multiple team members
-Priority Management - Set task priority (Low, Medium, High, Urgent)
-Deadline Tracking - Set and monitor task deadlines
-Task Filtering - Filter by position, task type, and priority
-Status Management - Mark tasks as completed or in progress
-Dashboard Statistics - View total, completed, and in-progress tasks
+Task Assignment - Assign multiple workers to tasks
+Priority System - Low, Medium, High, Urgent priority levels
+Deadline Management - Track task due dates
+Status Tracking - Mark tasks as In Progress or Completed
+Advanced Filtering - Filter by Position, Task Type, and Priority
+Dashboard Statistics - View total, completed, and in-progress task counts
 
-###UI/UX Features###
+### UI/UX Features
+Dark/Light Theme Toggle - Persistent theme selection with localStorage
+Modern Bootstrap 5 Design - Professional gradient styling
+Fully Responsive - Works on desktop, tablet, and mobile
 
-Dark/Light Theme - Toggle between themes with localStorage persistence
-Design - Bootstrap 5 with custom gradient styling 
-Responsive Layout - Works seamlessly on desktop and mobile
-Bootstrap Icons - Beautiful iconography throughout
+### Admin Features
+**Django Admin Panel** - Full administrative interface for:
+Task management
+Task Type configuration
+Worker administration
+Position management
 
+##Database Models
 
-###Database Structure###
-Models
-Task
+### Task Model
+`name` - CharField (task title)
+`description` - TextField (detailed description)
+`task_type` - ForeignKey to TaskType
+`priority` - CharField with choices (Low/Medium/High/Urgent)
+`deadline` - DateField
+`assignees` - ManyToManyField to Worker
+`is_completed` - BooleanField
+`created_at`, `updated_at` - Auto timestamp fields
 
-name - Task title
-description - Detailed task description
-task_type - Type of task (Bug, Feature, Testing, etc.)
-priority - Task priority level
-deadline - Due date
-assignees - Team members assigned to the task
-is_completed - Completion status
-created_at, updated_at - Timestamps
+### TaskType Model
+`name` - CharField (Bug, New Feature, Design, Testing, Refactoring, Breaking Change, DevOps)
 
-TaskType
-name - Name of the task type (Bug, New Feature, Design, etc.)
-Worker (from accounts app)
-Extends Django's AbstractUser
-position - Job position/role
-Position (from accounts app)
-name - Position name (Developer, Designer, DevOps, etc.)
+### Worker Model (from accounts app)
+Extends Django AbstractUser
+`position` - ForeignKey to Position
 
-###Installation & Setup
+### Position Model (from accounts app)
+`name` - CharField (Developer, Designer, DevOps, QA)
+
+### Database Relationships
+Task → TaskType (Many-to-One)
+Task → Worker (Many-to-Many)
+Worker → Position (Many-to-One)
+
+## Technology Stack
 Backend: Django 6.0.1
 Frontend: Bootstrap 5.3.0, Bootstrap Icons 1.11.3
-Database: SQLite (development), PostgreSQL-ready for production
+Database: SQLite3 (development)
 Python: 3.13.6
 
-Prerequisites
-pip (Python package manager)
-virtualenv (recommended)
-
-###Installation Steps
-
-#Clone the repository
-git clone https://github.com/yourusername/task_manager_django.git
-   cd task_manager_django
-
-#Create and activate virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-#Install dependencies
-pip install -r requirements.txt
-
-#Apply migrations
-python manage.py migrate
-
-#Create superuser
-python manage.py createsuperuser
-
-#Run development server
-python manage.py runserver
-
-#Access the application
-Main app: http://127.0.0.1:8000/tasks/
-Admin panel: http://127.0.0.1:8000/admin/
-
-###Project Structure
+## Project Structure
 task_manager_django/
-├── manage.py
-├── README.md
-├── requirements.txt
-├── task_manager_django/
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── accounts/
-│   ├── models.py      # Worker, Position models
-│   
-├── tasks/
-│   ├── models.py      # Task, TaskType models
-│   ├── views.py       # Task views
-│   ├── forms.py       # Task forms
+├── accounts/          # User authentication and Worker models
+├── tasks/             # Task management app
+│   ├── models.py      # Task and TaskType models
+│   ├── views.py       # CRUD views
+│   ├── forms.py       # Task forms with Bootstrap styling
 │   ├── urls.py        # URL routing
 │   └── templates/
-│       ├── base.html
-│       └── tasks/
-│           ├── home.html
-│           ├── task_list.html
-│           ├── task_detail.html
-│           └── task_form.html
-└── db.sqlite3 
+│       ├── base.html  # Base template with dark/light theme
+│       └── tasks/     # Task-specific templates
+├── README.md          # Comprehensive project documentation
+├── requirements.txt   # Project dependencies
+└── manage.py
 
 
+## Screenshots
+### Dashboard
+Overview with task statistics
+Filter panel for Position, Task Type, Priority
+Color-coded task cards
+Quick access to all tasks
 
-Navigate to "Create Task" in the navbar
-Fill in task details (name, description, type, priority, deadline)
-Assign team members
-Click "Create"
+### Task List
+Comprehensive table view
+Status badges (In Progress, Completed)
+Priority indicators
+Quick action buttons
 
-Filtering Tasks
+### Create/Edit Task Form
+Gradient header design
+Icon-labeled form fields
+Date picker for deadlines
+Multi-select for assignees
+Mark as completed checkbox (edit only)
 
-Go to Dashboard
-Use dropdown filters for Position, Task Type, or Priority
-Click "Apply Filters"
+### Dark Mode
+Complete dark theme implementation
+Consistent styling across all components
+Easy toggle in navbar
 
-Managing Tasks
+## Key Implementation Details
+Class-Based Views: for CRUD operations (CreateView, UpdateView, DeleteView)
+Function-Based Views: for dashboard and listing
+Django Forms: with Bootstrap widget customization
+Template Inheritance:for DRY code
+CSS Custom Properties:for theme switching
 
-View: Click on any task card to see details
-Edit: Click "Edit Task" button on task detail page
-Delete: Available through the detail page
-Complete: Use the checkbox when editing a task
+##Setup Instructions
+```bash
+# Clone repository
+git clone <repository-url>
+cd task_manager_django
 
-Admin Panel
-Access the Django admin panel at /admin/ to manage:
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate
 
-Tasks
-Task Types
-Workers
-Positions
-User permissions
+# Install dependencies
+pip install -r requirements.txt
 
-Future Enhancements
+# Run migrations
+python manage.py migrate
 
- Task comments and discussion threads
- File attachments for tasks
- Email notifications for deadlines
- Task history and audit log
- Kanban board view
- Time tracking
- Task dependencies
- Export tasks to CSV/PDF
+# Create superuser
+python manage.py createsuperuser
 
-Contributing
+# Run server
+python manage.py runserver
+```
 
-Fork the repository
-Create your feature branch (git checkout -b feature/AmazingFeature)
-Commit your changes (git commit -m 'Add some AmazingFeature')
-Push to the branch (git push origin feature/AmazingFeature)
-Open a Pull Request
-
-
-This project is part of a portfolio project for educational purposes.
-Author
-Anastasiia Savchenko
-GitHub: @nastasi
-
+Author: Anastasiia Savchenko 
