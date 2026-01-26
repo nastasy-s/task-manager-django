@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TaskFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: #2d2d2d;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .navbar h1 {
+            color: #5bc0de;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .login-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .login-box {
+            background: #2d2d2d;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+        }
+        h2 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .subtitle {
+            color: #b0b0b0;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #e0e0e0;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a1a1a;
+            border: 2px solid #404040;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #ffffff;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn-login:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        .error-message {
+            background: #3d1f1f;
+            border-left: 4px solid #ff4444;
+            color: #ffcccc;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .test-credentials {
+            margin-top: 30px;
+            padding: 20px;
+            background: #252525;
+            border-radius: 8px;
+            border: 1px solid #404040;
+            font-size: 13px;
+        }
+        .test-credentials h4 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .test-credentials p {
+            color: #b0b0b0;
+            margin: 5px 0;
+        }
+        .test-credentials code {
+            background: #1a1a1a;
+            color: #00d4ff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+   <nav style="background-color: #343a40; padding: 1rem 2rem;">
+    <a href="/" style="color: #5bc0de; text-decoration: none; font-size: 1.25rem; font-weight: 600;">TaskFlow</a>
+   </nav>
+
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Welcome back</h2>
+            <p class="subtitle">Please log in to continue</p>
+
+            {% if form.errors %}
+            <div class="error-message">
+                <strong>Login failed.</strong> Please check your username and password.
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" name="username" id="id_username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input type="password" name="password" id="id_password" required>
+                </div>
+                <button type="submit" class="btn-login">Log In</button>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
