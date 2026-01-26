@@ -14,4 +14,3 @@ python manage.py migrate
 # Load initial data (users)
 python manage.py loaddata fixtures/users.json
 echo "Users loaded successfully!"
-```
